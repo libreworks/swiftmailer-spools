@@ -1,0 +1,23 @@
+{
+    "name": "libreworks/swiftmailer-spools",
+    "type": "library",
+    "description": "Additional spools for use with the SwiftMailer library",
+    "keywords": ["mail", "mailer", "email", "mongodb", "database", "memcached"],
+    "version": "1.0.0-dev",
+    "homepage": "http://github.com/libreworks/swiftmailer-spools",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+	"swiftmailer/swiftmailer": "~5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit-skeleton-generator": "~2.0",
+        "phpunit/phpunit": "~4.6",
+        "mongofill/mongofill": "dev-master"
+    },
+    "autoload": {
+        "classmap": [
+          "src"
+        ]
+    }
+}
