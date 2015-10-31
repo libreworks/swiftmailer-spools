@@ -1,7 +1,7 @@
 # swiftmailer-spools
 Additional spools for use with the SwiftMailer library.
 
-This includes spools for PDO, MongoDB, and memcached.
+This includes spools for PDO and MongoDB.
 
 [![Build Status](https://travis-ci.org/libreworks/swiftmailer-spools.svg)](https://travis-ci.org/libreworks/swiftmailer-spools)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/libreworks/swiftmailer-spools/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/libreworks/swiftmailer-spools/?branch=master)

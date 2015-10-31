@@ -2,7 +2,7 @@
     "name": "libreworks/swiftmailer-spools",
     "type": "library",
     "description": "Additional spools for use with the SwiftMailer library",
-    "keywords": ["mail", "mailer", "email", "mongodb", "database", "memcached"],
+    "keywords": ["mail", "mailer", "email", "mongodb", "database", "pdo"],
     "version": "1.0.0-dev",
     "homepage": "http://github.com/libreworks/swiftmailer-spools",
     "license": "MIT",
