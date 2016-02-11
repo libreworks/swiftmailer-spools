@@ -13,7 +13,7 @@ class Swift_MongoDbSpoolTest extends MongoTestCase
         $this->manager = new \MongoDB\Driver\Manager($this->getUri());
         $this->manager->executeCommand(
             $this->getDatabaseName(),
-            new \MongoDB\Driver\Command(['dropDatabase' => 1])
+            new \MongoDB\Driver\Command(array('dropDatabase' => 1))
         );
     }
 
@@ -139,7 +139,7 @@ class Swift_MongoDbSpoolTest extends MongoTestCase
         $this->manager->executeBulkWrite($this->getNamespace(), $bulk, $wc);
         
         $object = new Swift_MongoDbSpool($this->manager, $this->getNamespace(), null, $wc);
-        $failed = [];
+        $failed = array();
         
         $transport = $this->getMockBuilder('Swift_Transport')->getMock();
         $transport->method('isStarted')->willReturn(true);
@@ -150,11 +150,11 @@ class Swift_MongoDbSpoolTest extends MongoTestCase
                 array($this->equalTo($message2), $this->equalTo($failed))
             )->willReturn(1);
 
-        $this->assertEquals(4, $this->docount([]));
+        $this->assertEquals(4, $this->docount(array()));
 
         $this->assertEquals(2, $object->flushQueue($transport, $failed));
         
-        $this->assertEquals(2, $this->docount([]));
+        $this->assertEquals(2, $this->docount(array()));
         
         $this->verifyMockObjects();
     }
