@@ -1,12 +1,12 @@
 <?php
 /**
- * 
+ *
  * @copyright 2015 LibreWorks contributors
  * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 /**
- * A Swift spool that uses MongoDB.
+ * A Swift spool that uses legacy Mongo drivers (http://docs.php.net/manual/en/book.mongo.php)
  *
  * @copyright 2015 LibreWorks contributors
  * @license   http://opensource.org/licenses/MIT MIT License
@@ -56,34 +56,34 @@ class Swift_MongoSpool extends Swift_ConfigurableSpool
      * Queues a message.
      *
      * @param Swift_Mime_Message $message The message to store
-     *
-     * @throws Swift_IoException
-     *
      * @return bool
+     * @throws Swift_IoException
      */
     public function queueMessage(Swift_Mime_Message $message)
     {
-        $this->collection->insert(array(
-            'message' => new \MongoBinData(serialize($message), \MongoBinData::GENERIC)
-        ));
-        return true;
+        try {
+            $this->collection->insert(array(
+                'message' => new \MongoBinData(serialize($message), 0)
+            ));
+            return true;
+        } catch (\Exception $e) {
+            throw new Swift_IoException("Could not write to database", 0, $e);
+        }
     }
 
     /**
      * Execute a recovery if for any reason a process is sending for too long.
      *
      * @param int $timeout in second Defaults is for very slow smtp responses
+     * @throws Swift_IoException
      */
     public function recover($timeout = 900)
     {
-        $results = $this->collection->find(array('sentOn' => array('$ne' => null)));
-        foreach ($results as $result) {
-            $lockedtime = $result['sentOn']->sec;
-            if ((time() - $lockedtime) > $timeout) {
-                $this->collection->update(array('_id' => $result['_id']),
-                    array('$set' => array('sentOn' => null)));
-            }
-        }
+        $this->write(
+            array('sentOn' => array('$lte' => new \MongoDate(time() - $timeout))),
+            array('$set' => array('sentOn' => null)),
+            array('multiple' => true)
+        );
     }
 
     /**
@@ -91,8 +91,8 @@ class Swift_MongoSpool extends Swift_ConfigurableSpool
      *
      * @param Swift_Transport $transport        A transport instance
      * @param string[]        $failedRecipients An array of failures by-reference
-     *
      * @return int The number of sent e-mails
+     * @throws Swift_IoException
      */
     public function flushQueue(Swift_Transport $transport, &$failedRecipients = null)
     {
@@ -113,15 +113,38 @@ class Swift_MongoSpool extends Swift_ConfigurableSpool
                 continue;
             }
             $id = $result['_id'];
-            $this->collection->update(array('_id' => $id),
-                array('$set' => array('sentOn' => new \MongoDate())));
+            $this->write(
+                array('_id' => $id),
+                array('$set' => array('sentOn' => new \MongoDate()))
+            );
             $message = unserialize($result['message']->bin);
             $count += $transport->send($message, $failedRecipients);
-            $this->collection->remove(array('_id' => $id));
+            try {
+                $this->collection->remove(array('_id' => $id));
+            } catch (\Exception $e) {
+                throw new Swift_IoException("Could not update email sent on date", 0, $e);
+            }            
             if ($timeLimit && (time() - $time) >= $timeLimit) {
                 break;
             }
         }
         return $count;
+    }
+
+    /**
+     * Executes a bulk write to MongoDB, wrapping exceptions.
+     *
+     * @param array $query
+     * @param array $set
+     * @param arary $options
+     * @throws Swift_IoException if things go wrong
+     */
+    protected function write(array $query, array $set, array $options = array())
+    {
+        try {
+            return $this->collection->update($query, $set, $options);
+        } catch (\Exception $e) {
+            throw new Swift_IoException("Could not write to database", 0, $e);
+        }
     }
 }

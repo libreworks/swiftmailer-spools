@@ -3,7 +3,6 @@
     "type": "library",
     "description": "Additional spools for use with the SwiftMailer library",
     "keywords": ["mail", "mailer", "email", "mongodb", "database", "pdo"],
-    "version": "1.0.0-dev",
     "homepage": "http://github.com/libreworks/swiftmailer-spools",
     "license": "MIT",
     "require": {
@@ -12,8 +11,7 @@
     },
     "require-dev": {
         "phpunit/phpunit-skeleton-generator": "~2.0",
-        "phpunit/phpunit": "~4.6",
-        "mongofill/mongofill": "dev-master"
+        "phpunit/phpunit": "~4.6"
     },
     "autoload": {
         "classmap": [
