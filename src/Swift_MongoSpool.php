@@ -62,9 +62,10 @@ class Swift_MongoSpool extends Swift_ConfigurableSpool
     public function queueMessage(Swift_Mime_Message $message)
     {
         try {
-            $this->collection->insert(array(
+            $doc = array(
                 'message' => new \MongoBinData(serialize($message), 0)
-            ));
+            );
+            $this->collection->insert($doc);
             return true;
         } catch (\Exception $e) {
             throw new Swift_IoException("Could not write to database", 0, $e);

@@ -129,7 +129,7 @@ class Swift_MongoDbSpool extends Swift_ConfigurableSpool
             $transport->start();
         }
         $limit = $this->getMessageLimit();
-        $results = $this->find(array('sentOn' => null), $limit > 0 ? array('limit' => $limit) : []);
+        $results = $this->find(array('sentOn' => null), $limit > 0 ? array('limit' => $limit) : array());
         $failedRecipients = (array) $failedRecipients;
         $count = 0;
         $time = time();
