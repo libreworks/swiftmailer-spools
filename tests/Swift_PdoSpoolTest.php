@@ -11,7 +11,7 @@ class Swift_PdoSpoolTest extends PHPUnit_Framework_TestCase
      */
     public function testIsStarted()
     {
-        $object = new Swift_PdoSpool($this->getMock('MockPdo'), 'foo', 'bar', 'message', 'sent');
+        $object = new Swift_PdoSpool($this->getMock('MockPdo', null), 'foo', 'bar', 'message', 'sent');
         $this->assertTrue($object->isStarted());
     }
 
@@ -22,16 +22,16 @@ class Swift_PdoSpoolTest extends PHPUnit_Framework_TestCase
      */
     public function testBadConstruct()
     {
-        new Swift_PdoSpool($this->getMock('MockPdo'), 'foo', 'bar', 'message', "     ");
+        new Swift_PdoSpool($this->getMock('MockPdo', null), 'foo', 'bar', 'message', "     ");
     }
-    
+
     /**
      * @covers Swift_PdoSpool::start
      * @covers Swift_PdoSpool::stop
      */
     public function testStart()
     {
-        $object = new Swift_PdoSpool($this->getMock('MockPdo'), 'foo', 'bar', 'message', 'sent');
+        $object = new Swift_PdoSpool($this->getMock('MockPdo', null), 'foo', 'bar', 'message', 'sent');
         // basically a no-op, just doing this for code coverage
         $object->start();
         $object->stop();
@@ -48,7 +48,7 @@ class Swift_PdoSpoolTest extends PHPUnit_Framework_TestCase
             ->setFrom(array('john@doe.com' => 'John Doe'))
             ->setTo(array('receiver@domain.org'))
             ->setBody($body);
-        
+
         $pdo = $this->getMock('MockPdo', array('prepare'));
         $stmt = $this->getMock('MockPdoStatement', array('bindValue', 'execute'));
         $pdo->expects($this->once())
@@ -60,10 +60,10 @@ class Swift_PdoSpoolTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo(1), $this->equalTo(serialize($message)), $this->equalTo(PDO::PARAM_STR));
         $stmt->expects($this->once())
             ->method('execute');
-        
+
         $object = new Swift_PdoSpool($pdo, 'foo', 'bar', 'message', 'sent');
         $object->queueMessage($message);
-        
+
         $this->verifyMockObjects();
     }
 
@@ -83,10 +83,10 @@ class Swift_PdoSpoolTest extends PHPUnit_Framework_TestCase
             ->with($this->equalTo(1), $this->isType('int'), $this->equalTo(PDO::PARAM_INT));
         $stmt->expects($this->once())
             ->method('execute');
-        
+
         $object = new Swift_PdoSpool($pdo, 'foo', 'bar', 'message', 'sent');
         $object->recover();
-        
+
         $this->verifyMockObjects();
     }
 
@@ -106,7 +106,7 @@ class Swift_PdoSpoolTest extends PHPUnit_Framework_TestCase
           ->setFrom(array('john@doe.com' => 'John Doe'))
           ->setTo(array('receiver@domain.org'))
           ->setBody($body . ' 2');
-        
+
         $pdo = $this->getMock('MockPdo', array('prepare', 'query'));
         $stmta = $this->getMock('MockPdoStatement', array('fetchAll'));
         $stmtb = $this->getMock('MockPdoStatement', array('execute'));
@@ -137,7 +137,7 @@ class Swift_PdoSpoolTest extends PHPUnit_Framework_TestCase
                 array($this->equalTo(array(1))),
                 array($this->equalTo(array(2)))
             );
-        
+
         $failed = array();
 
         $transport = $this->getMockBuilder('Swift_Transport')->getMock();
@@ -148,10 +148,10 @@ class Swift_PdoSpoolTest extends PHPUnit_Framework_TestCase
                 array($this->equalTo($message1), $this->equalTo($failed)),
                 array($this->equalTo($message2), $this->equalTo($failed))
             )->willReturn(1);
-        
+
         $object = new Swift_PdoSpool($pdo, 'foo', 'bar', 'message', 'sent');
         $object->flushQueue($transport, $failed);
-        
+
         $this->verifyMockObjects();
     }
 }
@@ -161,11 +161,31 @@ class MockPdo extends \PDO
     public function __construct()
     {
     }
+
+    public function prepare($statement, $driver_options = array())
+    {
+    }
+
+    public function query($statement)
+    {
+    }
 }
 
 class MockPdoStatement extends \PDOStatement
 {
     public function __construct()
+    {
+    }
+
+    public function fetchAll($fetch_style = null, $fetch_argument = null, $ctor_args = array())
+    {
+    }
+
+    public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR)
+    {
+    }
+
+    public function execute($input_parameters = null)
     {
     }
 }

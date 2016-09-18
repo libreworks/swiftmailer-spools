@@ -5,12 +5,17 @@
     "keywords": ["mail", "mailer", "email", "mongodb", "database", "pdo"],
     "homepage": "http://github.com/libreworks/swiftmailer-spools",
     "license": "MIT",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
     "require": {
         "php": ">=5.3.3",
 	"swiftmailer/swiftmailer": "~5.4"
     },
     "require-dev": {
-        "phpunit/phpunit-skeleton-generator": "~2.0",
+	"phpdocumentor/reflection-docblock": "^2.0",
         "phpunit/phpunit": "~4.6"
     },
     "autoload": {
