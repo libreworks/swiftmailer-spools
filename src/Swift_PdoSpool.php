@@ -21,7 +21,7 @@ class Swift_PdoSpool extends Swift_ConfigurableSpool
     protected $pkey;
     protected $messageField;
     protected $timeField;
-    
+
     /**
      * Creates a new PdoSpool
      *
@@ -39,7 +39,7 @@ class Swift_PdoSpool extends Swift_ConfigurableSpool
         $this->messageField = $this->checkBlank($messageField);
         $this->timeField = $this->checkBlank($timeField);
     }
-    
+
     private function checkBlank($value)
     {
         $value = trim($value);
@@ -76,13 +76,13 @@ class Swift_PdoSpool extends Swift_ConfigurableSpool
     /**
      * Queues a message.
      *
-     * @param Swift_Mime_Message $message The message to store
+     * @param Swift_Mime_SimpleMessage $message The message to store
      *
      * @throws Swift_IoException
      *
      * @return bool
      */
-    public function queueMessage(Swift_Mime_Message $message)
+    public function queueMessage(Swift_Mime_SimpleMessage $message)
     {
         try {
             $stmt = $this->pdo->prepare("INSERT INTO " . $this->table . " ("
@@ -155,6 +155,6 @@ class Swift_PdoSpool extends Swift_ConfigurableSpool
             return $count;
         } catch (\Exception $e) {
             throw new Swift_IoException("Could not access database", 0, $e);
-        }            
+        }
     }
 }

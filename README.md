@@ -16,7 +16,8 @@ You can install this library using Composer:
 $ composer require libreworks/swiftmailer-spools
 ```
 
-This project depends on SwiftMailer 5.4+, which requires PHP 5.3. It also runs just fine on HHVM.
+* The master branch (version 2.x) of this project depends on SwiftMailer 6.0+, which requires PHP 7.0.
+* Version 1.x of this project depends on SwiftMailer 5.4+, which requires PHP 5.3. It also runs just fine on HHVM.
 
 ## Compliance
 
@@ -62,15 +63,6 @@ $spool = new \Swift_PdoSpool(
 );
 ```
 
-### Mongo Spool (deprecated)
-
-```php
-$client = new \MongoClient();
-$db = new \MongoDB("dbname", $client);
-$collection = new \MongoCollection($db, "emails");
-$spool = new \Swift_MongoSpool($collection);
-```
-
 ### MongoDB Spool
 
 ```php
@@ -83,4 +75,13 @@ $spool = new \Swift_MongoDbSpool(
     $rp, // optional
     $wc, // optional
 );
+```
+
+### Mongo Spool (deprecated in 1.x; removed in 2.x)
+
+```php
+$client = new \MongoClient();
+$db = new \MongoDB("dbname", $client);
+$collection = new \MongoCollection($db, "emails");
+$spool = new \Swift_MongoSpool($collection);
 ```

@@ -29,9 +29,9 @@ class Swift_MongoDbSpool extends Swift_ConfigurableSpool
      * @var MongoDB\Driver\WriteConcern
      */
     private $wc;
-    
+
     private static $limit1 = array('limit' => 1);
-    
+
     /**
      * Creates a new MongoDB spool.
      *
@@ -84,11 +84,11 @@ class Swift_MongoDbSpool extends Swift_ConfigurableSpool
     /**
      * Queues a message.
      *
-     * @param Swift_Mime_Message $message The message to store
+     * @param Swift_Mime_SimpleMessage $message The message to store
      * @throws Swift_IoException
      * @return bool
      */
-    public function queueMessage(Swift_Mime_Message $message)
+    public function queueMessage(Swift_Mime_SimpleMessage $message)
     {
         $bulk = new \MongoDB\Driver\BulkWrite();
         $bulk->insert(array(
@@ -166,7 +166,7 @@ class Swift_MongoDbSpool extends Swift_ConfigurableSpool
             throw new Swift_IoException("Could not query for emails", 0, $e);
         }
     }
-    
+
     /**
      * Deletes a single record.
      *
@@ -179,7 +179,7 @@ class Swift_MongoDbSpool extends Swift_ConfigurableSpool
         $bulk->delete(array('_id' => $id), self::$limit1);
         $this->write($bulk);
     }
-    
+
     /**
      * Sets a single record's sentOn field.
      *
@@ -210,7 +210,7 @@ class Swift_MongoDbSpool extends Swift_ConfigurableSpool
             throw new Swift_IoException("Could not update email sent on date", 0, $e);
         }
     }
-    
+
     /**
      * Gets the current date.
      *

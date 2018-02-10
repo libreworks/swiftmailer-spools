@@ -2,7 +2,7 @@
 /**
  * Just common stuff for Mongo tests
  */
-class MongoTestCase extends PHPUnit_Framework_TestCase
+class MongoTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * Return the connection URI.

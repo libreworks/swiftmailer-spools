@@ -57,7 +57,7 @@ class Swift_MongoDbSpoolTest extends MongoTestCase
     public function testQueueMessage()
     {
         $body = 'Here is the message itself';
-        $message = Swift_Message::newInstance()
+        $message = (new Swift_Message())
           ->setSubject('Your subject')
           ->setFrom(array('john@doe.com' => 'John Doe'))
           ->setTo(array('receiver@domain.org'))
@@ -84,12 +84,12 @@ class Swift_MongoDbSpoolTest extends MongoTestCase
     public function testRecover()
     {
         $body = 'Here is the message itself';
-        $message1 = Swift_Message::newInstance()
+        $message1 = (new Swift_Message())
           ->setSubject('Your subject 1')
           ->setFrom(array('john@doe.com' => 'John Doe'))
           ->setTo(array('receiver@domain.org'))
           ->setBody($body . ' 1');
-        $message2 = Swift_Message::newInstance()
+        $message2 = (new Swift_Message())
           ->setSubject('Your subject 2')
           ->setFrom(array('john@doe.com' => 'John Doe'))
           ->setTo(array('receiver@domain.org'))
@@ -119,12 +119,12 @@ class Swift_MongoDbSpoolTest extends MongoTestCase
     public function testFlushQueue()
     {
         $body = 'Here is the message itself';
-        $message1 = Swift_Message::newInstance()
+        $message1 = (new Swift_Message())
           ->setSubject('Your subject 1')
           ->setFrom(array('john@doe.com' => 'John Doe'))
           ->setTo(array('receiver@domain.org'))
           ->setBody($body . ' 1');
-        $message2 = Swift_Message::newInstance()
+        $message2 = (new Swift_Message())
           ->setSubject('Your subject 2')
           ->setFrom(array('john@doe.com' => 'John Doe'))
           ->setTo(array('receiver@domain.org'))
