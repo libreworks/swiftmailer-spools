@@ -139,7 +139,7 @@ class Swift_PdoSpool extends Swift_ConfigurableSpool
                 . $this->timeField . ' = ? WHERE ' . $this->pkey . ' = ?');
             $dstmt = $this->pdo->prepare('DELETE FROM ' . $this->table . ' WHERE '
                 . $this->pkey . ' = ?');
-            foreach ($results->fetchAll(PDO::FETCH_COLUMN) as $result) {
+            foreach ($results->fetchAll() as $result) {
                 $id = $result[0];
                 $ustmt->execute(array(time(), $result[0]));
                 $message = unserialize($result[1]);
